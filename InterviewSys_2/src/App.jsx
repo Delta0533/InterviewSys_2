@@ -1,12 +1,10 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+//LOGIN PAGE
 import './App.css'
 
 function App() {
   return (
-    <div>
-      <h1>Kimrama!!</h1>
+    <div className='bg'>
+      <h1 className='txt-login'>Network Lab</h1>
     </div>
   )
 }
