@@ -1,0 +1,15 @@
+.box-btn {
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 10px 10px;
+}
+
+.box-btn:hover {
+    background-color: rgb(133, 162, 248);
+    color: white;
+}
+
+.txt-btn {
+    text-decoration: none;
+    font-size: 16px;
+}
