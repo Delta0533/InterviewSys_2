@@ -4,11 +4,16 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import EnterScore from "./pages/EnterScore/EnterScore.tsx";
 import DefaultPage from "./defaultPage.jsx";
+import Table from "./pages/Table/table.jsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <DefaultPage />,
+    },
+    {
+        path: "/table",
+        element: <Table />,
     },
     {
         path: "/enter",

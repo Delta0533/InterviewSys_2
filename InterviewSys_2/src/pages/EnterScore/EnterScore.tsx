@@ -1,61 +1,245 @@
-import React, { useState } from "react";
-import "./EnterScore.css";
+import React, { useState, useEffect } from "react";
 
 export default function EnterScore() {
     const interviewer = "Kimrama";
     const participant = "Johndoe";
+    const topics = ["โง้", "ฉลาด", "สวย", "หล่อ", "เท่", "รวย"];
 
-    const cri = ["หัวข้อ1", "หัวข้อ2", "หัวข้อ3", "topic4", "topic5"];
+    const [selectedTopics, setSelectedTopics] = useState({});
+    const [commentSet, setCommentSet] = useState({});
 
+    const handleComment = (topic, event) => {
+        setCommentSet((prev) => ({
+            ...prev,
+            [topic]: {
+                value: event.target.value,
+            },
+        }));
+        console.log(commentSet);
+    };
+    const handleSelectChange = (topic, event) => {
+        setSelectedTopics((prevState) => ({
+            ...prevState,
+            [topic]: {
+                value: event.target.value,
+                isOpen: false,
+            },
+        }));
+        console.log(selectedTopics);
+    };
+    const setCanOpen = (topic) => {
+        setSelectedTopics((prevState) => ({
+            ...prevState,
+            [topic]: { isOpen: true },
+        }));
+    };
     return (
-        <div className="outer-container">
-            <span className="inner-container">
-                <h1>EnterScore Page</h1>
-                <div className="info-container">
-                    <span className="info">ให้คะแนน: &nbsp;</span>
-                    <span className="info par-name">{participant}&nbsp;</span>
-                    <span className="info">โดย: &nbsp;</span>
-                    <span className="info inter-name">{interviewer}</span>
+        <div className="w-screen h-screen flex justify-center items-center !font-custom">
+            <div className="inline-block bg-gray-700 p-10 min-w-[60%]">
+                <div className="">
+                    <span className="text-7xl">ให้คะแนน: &nbsp;</span>
+                    <span className="text-7xl">{participant}&nbsp;</span>
+                    <span className="text-7xl">โดย: &nbsp;</span>
+                    <span className="text-7xl">{interviewer}</span>
                 </div>
-                <table>
-                    <tr>
-                        <td className="cri-topic">หัวข้อ</td>
-                        <td className="score-box">คะแนน</td>
-                    </tr>
-                    {cri.map((topic) => (
+                <table className="table w-full">
+                    <thead>
                         <tr>
-                            <td>{topic}</td>
-                            <td className="score-col">
-                                <select className="score-entry">
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                </select>
-                                <textarea
-                                    className="text-entry"
-                                    placeholder="content"
-                                ></textarea>
-                            </td>
+                            <th className="w-50 text-3xl">หัวข้อ</th>
+                            <th className="w-50 text-3xl">คะแนน</th>
                         </tr>
-                    ))}
+                    </thead>
+                    <tbody>
+                        {topics.map((topic, index) => (
+                            <tr key={index}>
+                                <td className="text-3xl">{topic}</td>
+                                <td className="flex items-center align-middle">
+                                    <div className="dropdown">
+                                        <div
+                                            tabIndex={0}
+                                            role="button"
+                                            className="btn m-1 w-[100px]"
+                                            onClick={(e) => setCanOpen(topic)}
+                                        >
+                                            {selectedTopics[topic]?.value ==
+                                            undefined
+                                                ? "กดเพื่อให้คะแนน"
+                                                : `${selectedTopics[topic].value}`}
+                                        </div>
+                                        {selectedTopics[`${topic}`]?.isOpen ==
+                                            undefined ||
+                                            (selectedTopics[`${topic}`]
+                                                ?.isOpen == true && (
+                                                <ul
+                                                    tabIndex={0}
+                                                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                                                >
+                                                    <li>
+                                                        <option
+                                                            className="font-xl"
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            0
+                                                        </option>
+                                                    </li>
+                                                    <li>
+                                                        <option
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            1
+                                                        </option>
+                                                    </li>
+                                                    <li>
+                                                        <option
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            2
+                                                        </option>
+                                                    </li>
+                                                    <li>
+                                                        <option
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            3
+                                                        </option>
+                                                    </li>
+                                                    <li>
+                                                        <option
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            4
+                                                        </option>
+                                                    </li>
+                                                    <li>
+                                                        <option
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            5
+                                                        </option>
+                                                    </li>
+                                                    <li>
+                                                        <option
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            6
+                                                        </option>
+                                                    </li>
+                                                    <li>
+                                                        <option
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            7
+                                                        </option>
+                                                    </li>
+                                                    <li>
+                                                        <option
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            8
+                                                        </option>
+                                                    </li>
+                                                    <li>
+                                                        <option
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            9
+                                                        </option>
+                                                    </li>
+                                                    <li>
+                                                        <option
+                                                            onClick={(e) =>
+                                                                handleSelectChange(
+                                                                    topic,
+                                                                    e
+                                                                )
+                                                            }
+                                                            key={index}
+                                                        >
+                                                            10
+                                                        </option>
+                                                    </li>
+                                                </ul>
+                                            ))}
+                                    </div>
+                                    <textarea
+                                        placeholder="เพิ่มเติม"
+                                        className="textarea textarea-bordered h-10 textarea-md w-full resize-none"
+                                        onChange={(e) =>
+                                            handleComment(topic, e)
+                                        }
+                                    >
+                                        {commentSet[topic]}
+                                    </textarea>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
-                {/* <textarea
-                    className="text-entry"
-                    placeholder="comment"
-                ></textarea> */}
                 <br />
-                <button className="submit-button" type="submit">
+                <button className="btn btn-success px-40 w-full" type="submit">
                     Submit
                 </button>
-            </span>
+            </div>
         </div>
     );
 }
