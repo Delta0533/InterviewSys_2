@@ -1,117 +1,63 @@
 //TABLE PAGE
-import DataTable from "react-data-table-component";
-import Button from "./button";
-import "./table.css";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const columns = [
-    {
-        name: "Name",
-        selector: (row) => row.name,
-        sortable: true,
-    },
-    {
-        name: "Student_ID",
-        selector: (row) => row.student_id,
-        sortable: true,
-    },
-    {
-        name: "Add_Score",
-        selector: (row) => row.add_score,
-        sortable: true,
-    },
-];
-
-const data = [
-    {
-        id: 1,
-        name: "Kimmana",
-        student_id: "6601XXXX",
-        add_score: <Button />,
-    },
-    {
-        id: 2,
-        name: "PrompipatJa",
-        student_id: "6601XXXX",
-        add_score: <Button />,
-    },
-    {
-        id: 1,
-        name: "Kimmana",
-        student_id: "6601XXXX",
-        add_score: <Button />,
-    },
-    {
-        id: 2,
-        name: "PrompipatJa",
-        student_id: "6601XXXX",
-        add_score: <Button />,
-    },
-    {
-        id: 1,
-        name: "Kimmana",
-        student_id: "6601XXXX",
-        add_score: <Button />,
-    },
-    {
-        id: 2,
-        name: "PrompipatJa",
-        student_id: "6601XXXX",
-        add_score: <Button />,
-    },
-    {
-        id: 1,
-        name: "Kimmana",
-        student_id: "6601XXXX",
-        add_score: <Button />,
-    },
-    {
-        id: 2,
-        name: "PrompipatJa",
-        student_id: "6601XXXX",
-        add_score: <Button />,
-    },
-];
-
-const customStyles = {
-    rows: {
-        style: {
-            minHeight: "60px", // override the row height
-            backgroundColor: "white",
-            color: "black",
-            fontSize: "20px",
-        },
-    },
-    headCells: {
-        style: {
-            paddingLeft: "8px", // override the cell padding for head cells
-            paddingRight: "8px",
-            backgroundColor: "RoyalBlue",
-            color: "white",
-            fontSize: "24px",
-        },
-    },
-    cells: {
-        style: {
-            paddingLeft: "8px", // override the cell padding for data cells
-            paddingRight: "8px",
-        },
-    },
-};
+const apiURL = "http://10.20.23.32:6970/junior/score";
 
 export default function Table() {
-    return (
-        <div className="box-table">
-            <DataTable
-                columns={columns}
-                data={data}
-                highlightOnHover
-                pointerOnHover
-                fixedHeader
-                responsive
-                selectableRows
-                pagination
-                customStyles={customStyles}
-            />
-        </div>
-    );
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const response = await axios.get(apiURL);
+    setData(response.data.items);
+  };
+
+  return (
+    <div className="overflow-x-auto container mx-auto px-10 py-10">
+      <table className="table bg-gray-700">
+        {/* head */}
+        <thead>
+          <tr className="">
+            <th></th>
+            <th>Name</th>
+            <th>Student ID</th>
+            <th>Topic</th>
+            <th>Topic</th>
+            <th>Topic</th>
+            <th>Topic</th>
+            <th>Topic</th>
+            <th>Add Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => {
+            return (
+              <tr className="hover" key={index}>
+                <th>{index+1}</th>
+                <td>{item.name}</td>
+                <td>{item.student_id}</td>
+                <td>score</td>
+                <td>score</td>
+                <td>score</td>
+                <td>score</td>
+                <td>score</td>
+                <td>
+                  <Link to="/enter">
+                    <button className="btn btn-outline btn-success rounded-full py-2 px-4">
+                      Add Score
+                    </button>
+                  </Link>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
 }

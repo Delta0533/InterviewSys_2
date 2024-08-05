@@ -7,10 +7,11 @@ import DefaultPage from "./defaultPage.jsx";
 import Table from "./pages/Table/table.jsx";
 import LoginPage from "./pages/LoginPage/Login.jsx";
 
+
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <DefaultPage />,
+        element: <Login />,
     },
     {
         path: "/login",
