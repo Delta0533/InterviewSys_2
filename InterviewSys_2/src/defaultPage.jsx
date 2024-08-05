@@ -4,7 +4,7 @@ export default function DefaultPage() {
     return (
         <div>
             <h1>Default Page</h1>
-            <Link cto="/login" className="link-button">
+            <Link to="/login" className="link-button">
                 Login Page
             </Link>
             <Link to="/table" className="link-button">

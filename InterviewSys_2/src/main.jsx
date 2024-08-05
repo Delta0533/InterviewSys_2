@@ -5,12 +5,17 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import EnterScore from "./pages/EnterScore/EnterScore.tsx";
 import DefaultPage from "./defaultPage.jsx";
 import Table from "./pages/Table/table.jsx";
-import Login from "./LoginPage/Login.jsx";
+import LoginPage from "./pages/LoginPage/Login.jsx";
+
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Login />,
+    },
+    {
+        path: "/login",
+        element: <LoginPage />,
     },
     {
         path: "/table",
