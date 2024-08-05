@@ -11,7 +11,7 @@ import LoginPage from "./pages/LoginPage/Login.jsx";
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Login />,
+        element: <DefaultPage />,
     },
     {
         path: "/login",
