@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import EnterScore from "./pages/EnterScore/EnterScore.tsx";
-import DefaultPage from "./defaultPage.jsx";
+// import DefaultPage from "./defaultPage.jsx";
 import Table from "./pages/Table/table.jsx";
 import Login from "./LoginPage/Login.jsx";
 
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
         element: <Table />,
     },
     {
-        path: "/enter",
+        path: "/enter/:junior_id",
         element: <EnterScore />,
     },
 ]);

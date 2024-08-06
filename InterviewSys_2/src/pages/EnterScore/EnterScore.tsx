@@ -1,12 +1,24 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 export default function EnterScore() {
     const interviewer = "Kimrama";
     const participant = "Johndoe";
     const topics = ["โง้", "ฉลาด", "สวย", "หล่อ", "เท่", "รวย"];
-
     const [selectedTopics, setSelectedTopics] = useState({});
     const [commentSet, setCommentSet] = useState({});
+    const BASE_URL = "http://10.20.23.32:6970";
+
+    const { junior_id } = useParams();
+    useEffect(() => {
+        initializePageData();
+    }, []);
+
+    const initializePageData = async () => {
+        console.log(`${BASE_URL}/${junior_id}`);
+        const res = await axios.get(`${BASE_URL}/junior/${junior_id}`);
+    };
 
     const handleComment = (topic, event) => {
         setCommentSet((prev) => ({
@@ -33,6 +45,7 @@ export default function EnterScore() {
             [topic]: { isOpen: true },
         }));
     };
+
     return (
         <div className="w-screen h-screen flex justify-center items-center !font-custom">
             <div className="inline-block bg-gray-700 p-10 min-w-[60%]">
