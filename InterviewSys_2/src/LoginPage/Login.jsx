@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import './Login.css'; // Make sure to create and import your CSS file
+import { useState } from "react";
+import "./Login.css"; // Make sure to create and import your CSS file
 
 const Login = () => {
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useState("");
 
     const handleLogin = (e) => {
         e.preventDefault();
-        console.log('Username:', username);
+        console.log("Username:", username);
     };
 
     return (
@@ -23,7 +23,9 @@ const Login = () => {
                         required
                     />
                 </div>
-                <button type="submit" className="login-button">Login</button>
+                <button type="submit" className="login-button">
+                    Login
+                </button>
             </form>
         </div>
     );
