@@ -4,18 +4,40 @@ import './Login.css';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [usernames, setUsernames] = useState([]);
+    const [users, setUsers] = useState([]);
 
-    // useEffect(() => {
-    //     
-    //     fetch('https://api.example.com/usernames')
-    //         .then(response => response.json())
-    //         .then(data => setUsernames(data))
-    //         .catch(error => console.error('Error fetching usernames:', error));
-    // }, []);
+    if (localStorage.getItem('seniorId')) {
+        window.location.href = '/table';
+    }
+
+    useEffect(() => {
+        fetch('http://10.20.23.32:6970/seniors')
+            .then(response => response.json())
+            .then(data => {
+                setUsers(data['items']);
+                setUsernames(data['items'].map(user => user.name));
+            })
+            .catch(error => console.error('Error fetching usernames:', error));
+    }, []);
 
     const handleLogin = (e) => {
         e.preventDefault();
-        console.log('Username:', username);
+        if (!username) {
+            console.error('Username is empty');
+            alert('Please select a username to login');
+            return;
+        }
+
+        const user = users.find(user => user.name === username);
+        
+        if (user) {
+            const userId = user.id;
+            localStorage.removeItem('seniorId');
+            localStorage.setItem('seniorId', userId);
+            window.location.href = '/table';
+        } else {
+            console.error('User not found');
+        }
     };
 
     return (
@@ -28,7 +50,7 @@ const Login = () => {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     >
-                        <option disabled selected>Select Your Username</option>
+                        <option selected>Select Your Username</option>
                         {usernames.map((name, index) => (
                             <option key={index} value={name}>
                                 {name}
