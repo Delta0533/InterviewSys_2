@@ -26,11 +26,11 @@ export default function Table() {
     }
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+    useEffect(() => {
+        getData();
+    }, []);
 
-  if (!data) return <div>Loading...</div>;  // Handle loading state
+    if (!data) return <div>Loading...</div>; // Handle loading state
 
   return (
     <div className="overflow-x-auto container mx-auto px-10 py-10">
