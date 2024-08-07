@@ -65,7 +65,7 @@ export default function Table() {
                 );
               })}
               <td>
-                <Link to="/enter">
+                <Link to={`/enter/${junior.student_id}`}>
                   <button className="btn btn-outline btn-success rounded-full py-2 px-4">
                     Add Score
                   </button>
