@@ -112,9 +112,12 @@ export default function Table() {
     window.location.href = "/";
   };
 
-  const handleAddScore = (studentId, nickname) => {
-    localStorage.setItem("nickname", nickname); // Save the nickname to localStorage
-    window.location.href = `/enter/${studentId}`;
+  const handleAddScore = (juniorStudentId, juniorId) => {
+    localStorage.removeItem('juniorStudentId');
+    localStorage.removeItem('juniorId');
+    localStorage.setItem('juniorStudentId', juniorStudentId); 
+    localStorage.setItem('juniorId', juniorId); 
+    window.location.href = `/enter/${juniorStudentId}`;
   };
 
   return (
@@ -177,9 +180,9 @@ export default function Table() {
               <td>
                 <button
                   className="btn btn-outline btn-success rounded-full py-2 px-4"
-                  onClick={() =>
-                    handleAddScore(junior.student_id, junior.nickname)
-                  }
+                  
+                  onClick={() => handleAddScore(junior.student_id, junior.id)}
+
                 >
                   Add Score
                 </button>
