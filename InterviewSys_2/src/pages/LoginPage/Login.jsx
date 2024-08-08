@@ -34,6 +34,7 @@ const Login = () => {
             const userId = user.id;
             localStorage.removeItem('seniorId');
             localStorage.setItem('seniorId', userId);
+            localStorage.setItem('seniorName', username);
             window.location.href = '/table';
         } else {
             console.error('User not found');
