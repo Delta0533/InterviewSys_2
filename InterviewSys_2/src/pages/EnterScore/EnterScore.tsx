@@ -94,8 +94,8 @@ export default function EnterScore() {
     };
 
     return (
-        <div className="w-screen h-screen flex justify-center items-center !font-custom">
-            <div className="inline-block bg-gray-700 p-10 min-w-[60%] rounded-lg">
+        <div className="w-screen flex justify-center items-center !font-custom">
+            <div className="inline-block bg-gray-700 p-10 min-w-[60%] my-20 rounded-lg">
                 <div className="pb-10 flex container justify-between items-center ">
                     <span className="text-6xl font-bold pb-5" style={{color: '#00d986'}}>น้อง{juniorNickname}</span>
                     <span className="text-2xl">{juniorName}</span>
