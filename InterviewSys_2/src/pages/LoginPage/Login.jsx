@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { CookiesProvider, useCookies } from 'react-cookie';
 import './Login.css';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [usernames, setUsernames] = useState([]);
     const [users, setUsers] = useState([]);
-
-    if (localStorage.getItem('seniorId')) {
-        window.location.href = '/table';
-    }
+    const [cookies, setCookie, removeCookie] = useCookies(['user'])
+    // if (localStorage.getItem('seniorId')) {
+    //     window.location.href = '/table';
+    // }
 
     useEffect(() => {
         fetch('http://10.20.23.32:6970/seniors')
@@ -31,6 +32,7 @@ const Login = () => {
         const user = users.find(user => user.name === username);
         
         if (user) {
+            setCookie('user', user, { path: '/' })
             const userId = user.id;
             localStorage.removeItem('seniorId');
             localStorage.setItem('seniorId', userId);

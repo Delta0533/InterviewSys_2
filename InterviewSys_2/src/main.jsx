@@ -6,6 +6,7 @@ import EnterScore from "./pages/EnterScore/EnterScore.tsx";
 // import DefaultPage from "./defaultPage.jsx";
 import Table from "./pages/Table/table.jsx";
 import LoginPage from "./pages/LoginPage/Login.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx";
 
 const router = createBrowserRouter([
     {
@@ -14,11 +15,19 @@ const router = createBrowserRouter([
     },
     {
         path: "/table",
-        element: <Table />,
+        element: (
+            <ProtectedRoute>
+                <Table />
+            </ProtectedRoute>
+        ),
     },
     {
         path: "/enter/:junior_id",
-        element: <EnterScore />,
+        element: (
+            <ProtectedRoute>
+                <EnterScore />
+            </ProtectedRoute>
+        ),
     },
 ]);
 

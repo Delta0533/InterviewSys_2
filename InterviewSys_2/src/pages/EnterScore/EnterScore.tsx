@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { CookiesProvider, useCookies } from 'react-cookie';
 const BASE_URL = "http://10.20.23.32:6970";
 
 export default function EnterScore() {
@@ -17,11 +17,12 @@ export default function EnterScore() {
   const navigate = useNavigate();
 
   const [isJuniorAlreadyScored, setIsJuniorAlreadyScored] = useState(false);
-
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
   useEffect(() => {
     initializePageData();
   }, []);
 
+  
   const initializePageData = async () => {
     try {
       // Fetch junior data to display on the page

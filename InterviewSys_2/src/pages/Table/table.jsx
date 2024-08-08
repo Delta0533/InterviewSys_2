@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import { CookiesProvider, useCookies } from 'react-cookie';
 const apiURL = "http://10.20.23.32:6970/senior/get_assigned_score/";
 
 export default function Table() {
@@ -12,11 +12,12 @@ export default function Table() {
   const [itemsPerPage] = useState(50); // Set items per page
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [seniorName, setSeniorName] = useState(""); // State for senior name
-
+  const [cookies, setCookie, removeCookie] = useCookies(['user']);
   // Get the senior name from the localStorage
   useEffect(() => {
     setSeniorName(localStorage.getItem("seniorName"));
   }, []);
+
 
   const getData = async () => {
     try {
@@ -108,7 +109,8 @@ export default function Table() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("seniorId"); // Remove the seniorId from localStorage
+    removeCookie('user', { path: '/' })
+    // localStorage.removeItem("seniorId"); // Remove the seniorId from localStorage
     window.location.href = "/";
   };
 
