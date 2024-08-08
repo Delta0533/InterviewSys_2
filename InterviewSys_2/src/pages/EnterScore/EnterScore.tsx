@@ -5,8 +5,11 @@ import { useParams, useNavigate } from "react-router-dom";
 const BASE_URL = "http://10.20.23.32:6970";
 
 export default function EnterScore() {
-    const interviewer = localStorage.getItem("seniorName");
-    const participant = localStorage.getItem("nickname");
+
+    const [juniorName, setJuniorName] = useState("");
+    const [juniorNickname, setJuniorNickname] = useState("");
+    const [juniorAcademicYear, setJuniorAcademicYear] = useState("");
+
     const [topics, setTopics] = useState([]);
     const [selectedTopics, setSelectedTopics] = useState({});
     const [commentSet, setCommentSet] = useState({});
@@ -19,16 +22,38 @@ export default function EnterScore() {
 
     const initializePageData = async () => {
         try {
-            // Fetch criteria
+            // Fetch junior data to display on the page
+            console.log(localStorage.getItem("juniorStudentId"));
+            const juniorRes = await axios.get(`${BASE_URL}/junior/${localStorage.getItem("juniorStudentId")}`);
+            const juniorData = juniorRes.data;
+            setJuniorName(juniorData.name);
+            setJuniorNickname(juniorData.nickname);
+            setJuniorAcademicYear(juniorData.academic_year);
+            
+            // Fetch all available criteria to display on the page
             const criteriaRes = await axios.get(`${BASE_URL}/criteriaType?page=1&size=50`);
             const criteriaItems = criteriaRes.data.items;
             setTopics(criteriaItems);
 
-            // Fetch junior data
-            const juniorRes = await axios.get(`${BASE_URL}/junior/${junior_id}`);
-            const juniorData = juniorRes.data;
-            console.log("Junior data:", juniorData);
+            // Check if the junior has already been scored
+            const scoreRes = await axios.get(`${BASE_URL}/senior/get_assigned_score/${localStorage.getItem("seniorId")}/${localStorage.getItem("juniorId")}`);
+            console.log(scoreRes.data['scores']);
 
+            if (scoreRes.data['scores'].length > 0) {
+                const scores = scoreRes.data['scores'];
+                const selectedTopics = {};
+                const commentSet = {};
+                for (const score of scores) {
+                    selectedTopics[score.criteria_name] = {
+                        value: score.score,
+                        isOpen: true,
+                    };
+                    commentSet[score.criteria_name] = score.comment;
+                }
+                setSelectedTopics(selectedTopics);
+                setCommentSet(commentSet);
+            }
+            
         } catch (error) {
             console.error("Error initializing page data:", error);
         }
@@ -56,36 +81,13 @@ export default function EnterScore() {
     const setCanOpen = (topicName) => {
         setSelectedTopics((prevState) => ({
             ...prevState,
-            [topicName]: { isOpen: true },
+            [topicName]: {value: selectedTopics[topicName]?.value, isOpen: true },
         }));
     };
 
     const handleSubmit = async () => {
         try {
-            // Fetch junior data
-            const juniorRes = await axios.get(`${BASE_URL}/junior/${junior_id}`);
-            const juniorData = juniorRes.data;
-            console.log("Junior data:", juniorData);
-
-            // Prepare data to send to server
-            const scores = topics.map(topic => ({
-                criteria_id: topic.id,
-                score: selectedTopics[topic.name]?.value || 0,
-                comment: commentSet[topic.name] || ""
-            }));
-
-            const body = {
-                junior_id: juniorData.id,
-                senior_id: localStorage.getItem("seniorId"),
-                scores: scores
-            };
-
-            // Update data to server
-            const response = await axios.put(`${BASE_URL}/score`, body);
-            console.log("Data submitted successfully:", response.data);
-
-            // Navigate back to the table page
-            navigate('/table-page'); 
+            
         } catch (error) {
             console.error("Error submitting data:", error);
         }
@@ -93,24 +95,23 @@ export default function EnterScore() {
 
     return (
         <div className="w-screen h-screen flex justify-center items-center !font-custom">
-            <div className="inline-block bg-gray-700 p-10 min-w-[60%]">
-                <div className="">
-                    <span className="text-7xl">ให้คะแนน: &nbsp;</span>
-                    <span className="text-7xl">{participant}&nbsp;</span>
-                    <span className="text-7xl">โดย: &nbsp;</span>
-                    <span className="text-7xl">{interviewer}</span>
+            <div className="inline-block bg-gray-700 p-10 min-w-[60%] rounded-lg">
+                <div className="pb-10 flex container justify-between items-center ">
+                    <span className="text-6xl font-bold pb-5" style={{color: '#00d986'}}>น้อง{juniorNickname}</span>
+                    <span className="text-2xl">{juniorName}</span>
+                    <span className="text-2xl">ชั้นปีที่ {juniorAcademicYear}</span>
                 </div>
                 <table className="table w-full">
                     <thead>
                         <tr>
-                            <th className="w-50 text-3xl">หัวข้อ</th>
-                            <th className="w-50 text-3xl">คะแนน</th>
+                            <th className="w-50 text-2xl">หัวข้อ</th>
+                            <th className="w-50 text-2xl">คะแนน</th>
                         </tr>
                     </thead>
                     <tbody>
                         {topics.map((topic, index) => (
                             <tr key={index}>
-                                <td className="text-3xl">{topic.name}</td>
+                                <td className="text-xl">{topic.name}</td>
                                 <td className="flex items-center align-middle">
                                     <div className="dropdown">
                                         <div
