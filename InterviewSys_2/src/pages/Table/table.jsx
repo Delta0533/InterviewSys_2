@@ -11,6 +11,13 @@ export default function Table() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(50); // Set items per page
   const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const [seniorName, setSeniorName] = useState(''); // State for senior name
+
+
+  // Get the senior name from the localStorage
+  useEffect(() => {
+    setSeniorName(localStorage.getItem('seniorName'));
+  }, []);
 
   const getData = async () => {
     try {
@@ -104,6 +111,17 @@ export default function Table() {
 
   return (
     <div className="overflow-x-auto container mx-auto px-10 py-10">
+      <div
+      className="flex">
+        <h1 className="text-2xl font-bold my-auto">Welcome, <span
+        style={{color: '#00d986'}}>{seniorName}</span> </h1>
+        <button
+          className="btn btn-outline btn-error rounded-full py-2 px-4 my-2 ml-auto"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      </div>
       <div className="mb-4">
         <input
           type="text"
@@ -171,12 +189,6 @@ export default function Table() {
           Next
         </button>
       </div>
-      <button
-        className="btn btn-outline btn-error rounded-full py-2 px-4 my-2"
-        onClick={handleLogout}
-      >
-        Logout
-      </button>
     </div>
   );
 }
