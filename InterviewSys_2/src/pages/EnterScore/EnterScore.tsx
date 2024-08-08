@@ -1,49 +1,94 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
+const BASE_URL = "http://10.20.23.32:6970";
 
 export default function EnterScore() {
-    const interviewer = "Kimrama";
-    const participant = "Johndoe";
-    const topics = ["โง้", "ฉลาด", "สวย", "หล่อ", "เท่", "รวย"];
+    const interviewer = localStorage.getItem("seniorName");
+    const participant = localStorage.getItem("nickname");
+    const [topics, setTopics] = useState([]);
     const [selectedTopics, setSelectedTopics] = useState({});
     const [commentSet, setCommentSet] = useState({});
-    const BASE_URL = "http://10.20.23.32:6970";
-
     const { junior_id } = useParams();
+    const navigate = useNavigate();
+
     useEffect(() => {
         initializePageData();
     }, []);
 
     const initializePageData = async () => {
-        console.log(`${BASE_URL}/${junior_id}`);
-        const res = await axios.get(`${BASE_URL}/junior/${junior_id}`);
+        try {
+            // Fetch criteria
+            const criteriaRes = await axios.get(`${BASE_URL}/criteriaType?page=1&size=50`);
+            const criteriaItems = criteriaRes.data.items;
+            setTopics(criteriaItems);
+
+            // Fetch junior data
+            const juniorRes = await axios.get(`${BASE_URL}/junior/${junior_id}`);
+            const juniorData = juniorRes.data;
+            console.log("Junior data:", juniorData);
+
+        } catch (error) {
+            console.error("Error initializing page data:", error);
+        }
     };
 
-    const handleComment = (topic, event) => {
+    const handleComment = (topicName, event) => {
         setCommentSet((prev) => ({
             ...prev,
-            [topic]: {
-                value: event.target.value,
-            },
+            [topicName]: event.target.value,
         }));
         console.log(commentSet);
     };
-    const handleSelectChange = (topic, event) => {
+
+    const handleSelectChange = (topicName, event) => {
         setSelectedTopics((prevState) => ({
             ...prevState,
-            [topic]: {
-                value: event.target.value,
+            [topicName]: {
+                value: event.target.innerText,
                 isOpen: false,
             },
         }));
         console.log(selectedTopics);
     };
-    const setCanOpen = (topic) => {
+
+    const setCanOpen = (topicName) => {
         setSelectedTopics((prevState) => ({
             ...prevState,
-            [topic]: { isOpen: true },
+            [topicName]: { isOpen: true },
         }));
+    };
+
+    const handleSubmit = async () => {
+        try {
+            // Fetch junior data
+            const juniorRes = await axios.get(`${BASE_URL}/junior/${junior_id}`);
+            const juniorData = juniorRes.data;
+            console.log("Junior data:", juniorData);
+
+            // Prepare data to send to server
+            const scores = topics.map(topic => ({
+                criteria_id: topic.id,
+                score: selectedTopics[topic.name]?.value || 0,
+                comment: commentSet[topic.name] || ""
+            }));
+
+            const body = {
+                junior_id: juniorData.id,
+                senior_id: localStorage.getItem("seniorId"),
+                scores: scores
+            };
+
+            // Update data to server
+            const response = await axios.put(`${BASE_URL}/score`, body);
+            console.log("Data submitted successfully:", response.data);
+
+            // Navigate back to the table page
+            navigate('/table-page'); 
+        } catch (error) {
+            console.error("Error submitting data:", error);
+        }
     };
 
     return (
@@ -65,191 +110,52 @@ export default function EnterScore() {
                     <tbody>
                         {topics.map((topic, index) => (
                             <tr key={index}>
-                                <td className="text-3xl">{topic}</td>
+                                <td className="text-3xl">{topic.name}</td>
                                 <td className="flex items-center align-middle">
                                     <div className="dropdown">
                                         <div
                                             tabIndex={0}
                                             role="button"
                                             className="btn m-1 w-[100px]"
-                                            onClick={(e) => setCanOpen(topic)}
+                                            onClick={() => setCanOpen(topic.name)}
                                         >
-                                            {selectedTopics[topic]?.value ==
-                                            undefined
+                                            {selectedTopics[topic.name]?.value === undefined
                                                 ? "กดเพื่อให้คะแนน"
-                                                : `${selectedTopics[topic].value}`}
+                                                : `${selectedTopics[topic.name].value}`}
                                         </div>
-                                        {selectedTopics[`${topic}`]?.isOpen ==
-                                            undefined ||
-                                            (selectedTopics[`${topic}`]
-                                                ?.isOpen == true && (
-                                                <ul
-                                                    tabIndex={0}
-                                                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
-                                                >
-                                                    <li>
+                                        {selectedTopics[topic.name]?.isOpen && (
+                                            <ul
+                                                tabIndex={0}
+                                                className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                                            >
+                                                {[...Array(11).keys()].map((score) => (
+                                                    <li key={score}>
                                                         <option
                                                             className="font-xl"
                                                             onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
+                                                                handleSelectChange(topic.name, e)
                                                             }
-                                                            key={index}
                                                         >
-                                                            0
+                                                            {score}
                                                         </option>
                                                     </li>
-                                                    <li>
-                                                        <option
-                                                            onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
-                                                            }
-                                                            key={index}
-                                                        >
-                                                            1
-                                                        </option>
-                                                    </li>
-                                                    <li>
-                                                        <option
-                                                            onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
-                                                            }
-                                                            key={index}
-                                                        >
-                                                            2
-                                                        </option>
-                                                    </li>
-                                                    <li>
-                                                        <option
-                                                            onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
-                                                            }
-                                                            key={index}
-                                                        >
-                                                            3
-                                                        </option>
-                                                    </li>
-                                                    <li>
-                                                        <option
-                                                            onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
-                                                            }
-                                                            key={index}
-                                                        >
-                                                            4
-                                                        </option>
-                                                    </li>
-                                                    <li>
-                                                        <option
-                                                            onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
-                                                            }
-                                                            key={index}
-                                                        >
-                                                            5
-                                                        </option>
-                                                    </li>
-                                                    <li>
-                                                        <option
-                                                            onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
-                                                            }
-                                                            key={index}
-                                                        >
-                                                            6
-                                                        </option>
-                                                    </li>
-                                                    <li>
-                                                        <option
-                                                            onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
-                                                            }
-                                                            key={index}
-                                                        >
-                                                            7
-                                                        </option>
-                                                    </li>
-                                                    <li>
-                                                        <option
-                                                            onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
-                                                            }
-                                                            key={index}
-                                                        >
-                                                            8
-                                                        </option>
-                                                    </li>
-                                                    <li>
-                                                        <option
-                                                            onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
-                                                            }
-                                                            key={index}
-                                                        >
-                                                            9
-                                                        </option>
-                                                    </li>
-                                                    <li>
-                                                        <option
-                                                            onClick={(e) =>
-                                                                handleSelectChange(
-                                                                    topic,
-                                                                    e
-                                                                )
-                                                            }
-                                                            key={index}
-                                                        >
-                                                            10
-                                                        </option>
-                                                    </li>
-                                                </ul>
-                                            ))}
+                                                ))}
+                                            </ul>
+                                        )}
                                     </div>
                                     <textarea
                                         placeholder="เพิ่มเติม"
                                         className="textarea textarea-bordered h-10 textarea-md w-full resize-none"
-                                        onChange={(e) =>
-                                            handleComment(topic, e)
-                                        }
-                                    >
-                                        {commentSet[topic]}
-                                    </textarea>
+                                        onChange={(e) => handleComment(topic.name, e)}
+                                        value={commentSet[topic.name] || ""}
+                                    />
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
                 <br />
-                <button className="btn btn-success px-40 w-full" type="submit">
+                <button className="btn btn-success px-40 w-full" type="submit" onClick={handleSubmit}>
                     Submit
                 </button>
             </div>
