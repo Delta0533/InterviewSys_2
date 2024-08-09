@@ -11,7 +11,8 @@ const Login = () => {
     }
 
     useEffect(() => {
-        fetch('http://10.20.23.32:6970/seniors')
+        const BASE_URL = import.meta.env.VITE_GET_API_URL;
+        fetch(`${BASE_URL}/seniors`)
             .then(response => response.json())
             .then(data => {
                 setUsers(data['items']);
