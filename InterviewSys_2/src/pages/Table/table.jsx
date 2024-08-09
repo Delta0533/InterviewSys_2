@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const apiURL = "http://10.20.23.32:6970/senior/get_assigned_score/";
+const apiURL = `${import.meta.env.VITE_GET_API_URL}/senior/get_assigned_score/`;
 
 export default function Table() {
   const [data, setData] = useState(null); // Initial value should be null for an object

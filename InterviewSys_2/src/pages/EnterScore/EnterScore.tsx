@@ -2,7 +2,8 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const BASE_URL = "http://10.20.23.32:6970";
+const BASE_URL = import.meta.env.VITE_GET_API_URL;
+
 
 export default function EnterScore() {
   const [juniorName, setJuniorName] = useState("");
