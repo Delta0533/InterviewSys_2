@@ -7,6 +7,7 @@ import EnterScore from "./pages/EnterScore/EnterScore.tsx";
 import Table from "./pages/Table/table.jsx";
 import LoginPage from "./pages/LoginPage/Login.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import AdminTablePage from "./pages/Admin/Admin.jsx";
 
 const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
                 <EnterScore />
             </ProtectedRoute>
         ),
+    },
+    {
+        path: "/admin",
+        element: <AdminTablePage />,
     },
 ]);
 

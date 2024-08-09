@@ -3,12 +3,12 @@ import { Navigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 function ProtectedRoute({ children }) {
-    const [cookies] = useCookies(['user']);
+    const [cookies] = useCookies(['userName']);
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        if (cookies.user) {
+        if (cookies.userName) {
             setIsAuthenticated(true);
         } else {
             setIsAuthenticated(false);

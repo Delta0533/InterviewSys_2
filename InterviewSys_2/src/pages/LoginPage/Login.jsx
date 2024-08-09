@@ -30,9 +30,9 @@ const Login = () => {
         }
 
         const user = users.find(user => user.name === username);
-        
         if (user) {
-            setCookie('user', user, { path: '/' })
+            setCookie('userName', user.name, { path: '/' })
+            setCookie('userID', user.id, { path: '/' })
             const userId = user.id;
             localStorage.removeItem('seniorId');
             localStorage.setItem('seniorId', userId);

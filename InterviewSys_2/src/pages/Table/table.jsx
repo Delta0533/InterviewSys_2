@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { CookiesProvider, useCookies } from 'react-cookie';
+import Cookies from 'js-cookie';
 const apiURL = "http://10.20.23.32:6970/senior/get_assigned_score/";
 
 export default function Table() {
@@ -14,28 +15,38 @@ export default function Table() {
   const [seniorName, setSeniorName] = useState(""); // State for senior name
   const [cookies, setCookie, removeCookie] = useCookies(['user']);
   // Get the senior name from the localStorage
+//   useEffect(() => {
+//     setSeniorName(localStorage.getItem("seniorName"));
+//   }, []);
   useEffect(() => {
-    setSeniorName(localStorage.getItem("seniorName"));
+    const userCookie = Cookies.get('userName');
+    if(userCookie){
+      setSeniorName(userCookie);
+    }
   }, []);
 
 
-  const getData = async () => {
-    try {
-      const response = await axios.get(
-        apiURL + localStorage.getItem("seniorId")
-      ); // Adjust the key name based on your localStorage usage
-      setData(response.data);
 
-      // Extract unique criteria names
-      const uniqueCriteria = new Set();
-      response.data.juniors.forEach((junior) => {
-        junior.scores.forEach((score) => {
-          uniqueCriteria.add(score.criteria_name);
+  const getData = async () => {
+    const userCookie = Cookies.get('userID');
+    if(userCookie){
+      try {
+        const response = await axios.get(
+          apiURL + userCookie
+        ); // Adjust the key name based on your localStorage usage
+        setData(response.data);
+
+        // Extract unique criteria names
+        const uniqueCriteria = new Set();
+        response.data.juniors.forEach((junior) => {
+          junior.scores.forEach((score) => {
+            uniqueCriteria.add(score.criteria_name);
+          });
         });
-      });
-      setCriteria(Array.from(uniqueCriteria));
-    } catch (error) {
-      console.error("Error fetching data:", error);
+        setCriteria(Array.from(uniqueCriteria));
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
   };
 
@@ -88,6 +99,7 @@ export default function Table() {
       junior.academic_year.toString().includes(searchQuery)
     );
   });
+  
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -110,7 +122,7 @@ export default function Table() {
 
   const handleLogout = () => {
     removeCookie('user', { path: '/' })
-    // localStorage.removeItem("seniorId"); // Remove the seniorId from localStorage
+    localStorage.removeItem("seniorId"); // Remove the seniorId from localStorage
     window.location.href = "/";
   };
 
