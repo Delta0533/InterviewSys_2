@@ -1,7 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-const juniorsURL = "http://10.20.23.32:6970/junior/score"
+import { CookiesProvider, useCookies } from 'react-cookie';
+const BaseURL = "http://10.20.23.32:6970"
 const AdminTablePage = () => {
   const [data, setData] = useState(null);
   const [criteria, setCriteria] = useState([]);
@@ -9,9 +10,10 @@ const AdminTablePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(50);
+  const [cookies, setCookie, removeCookie] = useCookies(['junior_student_id']);
   const getData = async () => {
     try {
-        const response = await axios.get(juniorsURL);
+        const response = await axios.get(`${BaseURL}/junior/score`);
         setData(response.data);
         const uniqueCriteria = new Set();
         
@@ -29,10 +31,6 @@ const AdminTablePage = () => {
 
   useEffect(() => {
     getData();
-
-    if (localStorage.getItem("nickname")) {
-      localStorage.removeItem("nickname");
-    }
   }, []);
 
   if (!data) return <div>Loading...</div>;
@@ -84,6 +82,11 @@ const AdminTablePage = () => {
     );
   });
 
+  const handleJuniorDetail = (juniorStudentId) => { 
+    setCookie('junior_student_id', juniorStudentId, { path: '/' })
+    window.location.href = `/admin/${juniorStudentId}`;
+  };
+
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -102,6 +105,7 @@ const AdminTablePage = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
   
   return (
     <div className="overflow-x-auto container mx-auto px-10 py-10">
@@ -151,13 +155,11 @@ const AdminTablePage = () => {
                 <td key={index}>{scoreValue ? scoreValue : "0"}</td>
               );
             })}
-            <td>{junior.total_avg_score.toFixed(2)}</td>
+            <td>{junior.total_avg_score}</td>
             <td>
               <button
                 className="btn btn-outline btn-success rounded-full py-2 px-4"
-                
-                // onClick={() => handleAddScore(junior.student_id, junior.id)}
-
+                onClick={() => handleJuniorDetail(junior.student_id)}
               >
                 Detail
               </button>

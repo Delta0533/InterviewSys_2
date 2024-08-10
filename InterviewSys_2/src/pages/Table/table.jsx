@@ -33,7 +33,7 @@ export default function Table() {
       try {
         const response = await axios.get(
           apiURL + userCookie
-        ); // Adjust the key name based on your localStorage usage
+        ); 
         setData(response.data);
 
         // Extract unique criteria names

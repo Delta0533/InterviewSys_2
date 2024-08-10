@@ -8,7 +8,7 @@ import Table from "./pages/Table/table.jsx";
 import LoginPage from "./pages/LoginPage/Login.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminTablePage from "./pages/Admin/Admin.jsx";
-
+import JuniorDetail from "./pages/JuniorDetail/JuniorDetail.jsx";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -34,6 +34,10 @@ const router = createBrowserRouter([
         path: "/admin",
         element: <AdminTablePage />,
     },
+    {
+      path: "/admin/:junior_id",
+      element: <JuniorDetail />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
