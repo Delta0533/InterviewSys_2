@@ -145,36 +145,39 @@ export default function Table() {
         </div>
       </div>
       <table className="table table-xs bg-gray-700 table-auto">
-        <thead>
-          <tr>
-            <th></th>
-            <th onClick={() => sortData("name")}>Name</th>
-            <th onClick={() => sortData("nickname")}>Nickname</th>
-            <th onClick={() => sortData("student_id")}>Student ID</th>
-            <th onClick={() => sortData("academic_year")}>Year</th>
-            {criteria.map((criterion, index) => (
-              <th key={index} className="w-14">
-                {criterion}
-              </th>
-            ))}
-            <th>Add Score</th>
-          </tr>
-        </thead>
+      <thead>
+        <tr>
+          <th className="w-12 max-width-12 text-center"><button>No.</button></th> {/* Fixed width */}
+          <th className="w-52 text-center max-width-52 hover:cursor-pointer"><button onClick={() => sortData("name")}>Name</button></th> {/* Fixed width */}
+          <th className="w-28 text-center max-width-28"><button onClick={() => sortData("nickname")}>Nickname</button></th> {/* Fixed width */}
+          <th className="w-32 text-center max-width-32"><button onClick={() => sortData("student_id")}>Student ID</button></th> {/* Fixed width */}
+          <th className="w-16 text-center max-width-16"><button onClick={() => sortData("academic_year")}>Year</button></th> {/* Fixed width */}
+          {criteria.map((criterion, index) => (
+            <th
+              key={index}
+              className="overflow-hidden text-ellipsis whitespace-nowrap text-center min-w-[4rem] max-w-[4rem]"
+            >
+              {criterion}
+            </th>
+          ))}
+          <th className="w-24 text-center">Add Score</th> {/* Fixed width */}
+        </tr>
+      </thead>
         <tbody>
           {currentItems.map((junior, index) => (
             <tr className="hover" key={junior.id}>
-              <th>{indexOfFirstItem + index + 1}</th>
-              <td>{junior.name}</td>
-              <td>{junior.nickname}</td>
-              <td>{junior.student_id}</td>
-              <td>{junior.academic_year}</td>
+              <th className="text-center w-14 overflow-hidden text-ellipsis whitespace-nowrap">{indexOfFirstItem + index + 1}</th>
+              <td className="text-left w-14 overflow-hidden text-ellipsis whitespace-nowrap">{junior.name}</td>
+              <td className="text-left w-14 overflow-hidden text-ellipsis whitespace-nowrap">{junior.nickname}</td>
+              <td className="text-center w-14 overflow-hidden text-ellipsis whitespace-nowrap">{junior.student_id}</td>
+              <td className="text-center w-14 overflow-hidden text-ellipsis whitespace-nowrap">{junior.academic_year}</td>
               {criteria.map((criterion, index) => {
                 // Find score for the current criterion
                 const scoreEntry = junior.scores.find(
                   (score) => score.criteria_name === criterion
                 );
                 return (
-                  <td key={index}>{scoreEntry ? scoreEntry.score : "0"}</td>
+                  <td key={index} className="text-center w-14 text-center overflow-hidden text-ellipsis whitespace-nowrap">{scoreEntry ? scoreEntry.score : "-"}</td>
                 );
               })}
               <td>
