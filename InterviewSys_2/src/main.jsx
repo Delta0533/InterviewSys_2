@@ -37,7 +37,7 @@ const router = createBrowserRouter([
     {
       path: "/admin/:junior_id",
       element: <JuniorDetail />,
-  },
+    },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
