@@ -64,10 +64,12 @@ const AdminTablePage = () => {
       return sortConfig.direction === "asc"
         ? a.total_avg_score - b.total_avg_score
         : b.total_avg_score - a.total_avg_score;
-    } else if (a.score[sortConfig.key] !== undefined && b.score[sortConfig.key] !== undefined) {
-      return sortConfig.direction === "asc"
-        ? a.score[sortConfig.key] - b.score[sortConfig.key]
-        : b.score[sortConfig.key] - a.score[sortConfig.key];
+    } else if (a.score[sortConfig.key] !== undefined || b.score[sortConfig.key] !== undefined) {
+        let aVal = a.score[sortConfig.key] !== undefined ? a.score[sortConfig.key] : 0;
+        let bVal = b.score[sortConfig.key] !== undefined ? b.score[sortConfig.key] : 0;
+        return sortConfig.direction === "asc"
+          ? aVal - bVal
+          : bVal - aVal;
     } else {
       return 0;
     }
