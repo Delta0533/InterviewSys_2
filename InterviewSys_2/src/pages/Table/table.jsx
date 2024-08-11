@@ -147,11 +147,11 @@ export default function Table() {
       <table className="table table-xs bg-gray-700 table-auto">
       <thead>
         <tr>
-          <th className="w-12 max-width-12 text-center">No.</th> {/* Fixed width */}
-          <th className="w-52 text-center max-width-52">Name</th> {/* Fixed width */}
-          <th className="w-28 text-center max-width-28">Nickname</th> {/* Fixed width */}
-          <th className="w-32 text-center max-width-32">Student ID</th> {/* Fixed width */}
-          <th className="w-16 text-center max-width-16">Year</th> {/* Fixed width */}
+          <th className="w-12 max-width-12 text-center"><button>No.</button></th> {/* Fixed width */}
+          <th className="w-52 text-center max-width-52 hover:cursor-pointer"><button onClick={() => sortData("name")}>Name</button></th> {/* Fixed width */}
+          <th className="w-28 text-center max-width-28"><button onClick={() => sortData("nickname")}>Nickname</button></th> {/* Fixed width */}
+          <th className="w-32 text-center max-width-32"><button onClick={() => sortData("student_id")}>Student ID</button></th> {/* Fixed width */}
+          <th className="w-16 text-center max-width-16"><button onClick={() => sortData("academic_year")}>Year</button></th> {/* Fixed width */}
           {criteria.map((criterion, index) => (
             <th
               key={index}
